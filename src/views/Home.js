@@ -21,13 +21,15 @@ const Home = (props) => {
 
 	function generateDetails() {
 		console.log("Generating details...")
-
+		
+		// Generate a random name
 		axios.get('https://randomuser.me/api/').then(function (response) {
 			setName(`${response.data.results[0].name.first} ${response.data.results[0].name.last}`)
 		}).catch(function (error) {
 			console.error(error)
 		})
 
+		// Generate a random gradient background
 		const colorOptions = {
 			method: 'GET',
 			url: 'https://random-palette-generator.p.rapidapi.com/palette/Complementary/1/7',
@@ -35,12 +37,12 @@ const Home = (props) => {
 			  'X-RapidAPI-Key': secrets.paletteApi,
 			  'X-RapidAPI-Host': 'random-palette-generator.p.rapidapi.com'
 			}
-		};
+		}
 		  
-		  axios.request(colorOptions).then(function (response) {
-			  let colors = response.data.data[0].palette
+		axios.request(colorOptions).then(function (response) {
+			let colors = response.data.data[0].palette
 
-			  setGradient(`
+			setGradient(`
 				radial-gradient(at 40% 20%, ${colors[0]} 0px, transparent 50%),
 				radial-gradient(at 80% 0%, ${colors[1]} 0px, transparent 50%),
 				radial-gradient(at 0% 50%, ${colors[2]} 0px, transparent 50%),
@@ -48,15 +50,30 @@ const Home = (props) => {
 				radial-gradient(at 0% 100%, ${colors[4]} 0px, transparent 50%),
 				radial-gradient(at 80% 100%, ${colors[5]} 0px, transparent 50%),
 				radial-gradient(at 0% 0%, ${colors[6]} 0px, transparent 50%)`)
-		  }).catch(function (error) {
-			  console.error(error);
-		  });
+		}).catch(function (error) {
+			console.error(error)
+		})
+
+		// Generate a random expiration date
+		let expiration = expirationDate(new Date(2022, 1, 1), new Date(2031, 1, 1)).toLocaleDateString('en-US', {
+			month: '2-digit',
+			year: '2-digit'
+		})
+
+		setExpiration(expiration)
+
+		// Generate a random security key
+		setSecurity(Math.floor(Math.random() * 899) + 100)
+	}
+
+	function expirationDate(start, end) {
+		return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 	}
 
 	return (
 		<>
 			<div className='padded-centered'>
-				<Card name={ name } gradient={ gradient }></Card>
+				<Card name={ name } expiration={ expiration } security={ security } gradient={ gradient }></Card>
 
 				<button onClick={ generateDetails }>Generate Details</button>
 			</div>
