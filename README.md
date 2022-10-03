@@ -15,3 +15,7 @@ This ReactJS application generates aesthetically pleasing credit cards with rand
 
 ## Getting Started
 Want to play around with this project? Download or clone, enter the directory, use `npm install` to install all required dependencies, and use `npm start` to begin the server!
+
+## Image credentials
+<a href="https://www.flaticon.com/free-icons/credit-card">Credit card icon (logo) created by Freepik - Flaticon.</a>
+<a href="https://www.flaticon.com/free-icons/credit-card">Credit card icon (favicon) created by creative_designer - Flaticon.</a>
