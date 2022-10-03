@@ -1,7 +1,11 @@
+import Navigation from "./components/ Navigation";
+import Home from "./views/Home"
+
 function App() {
   return (
     <>
-		<p>Welcome!</p>
+		<Navigation></Navigation>
+		<Home></Home>
 	</>
   );
 }
