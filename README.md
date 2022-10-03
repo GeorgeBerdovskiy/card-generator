@@ -2,7 +2,16 @@
   <img width="250px" src="resources/Logo.png">
 </p>
 
-This ReactJS application generates aesthetically pleasing credit cards with random names, numbers, and colors using several public APIs.
+# Cardio
+This ReactJS application generates aesthetically pleasing credit cards with random names, numbers, and gradients using several public APIs. The credit card numbers are valid Visa credentials (although they won't work because they aren't connected to any accounts, and their security keys aren't known)!
+
+<p align="center">
+  <img width="750px" src="resources/01.png">
+</p>
+
+<p align="center">
+  <img width="750px" src="resources/02.png">
+</p>
 
 ## Getting Started
 Want to play around with this project? Download or clone, enter the directory, use `npm install` to install all required dependencies, and use `npm start` to begin the server!

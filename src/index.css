@@ -59,6 +59,7 @@ nav {
 
 	background-color: aqua;
 	border-radius: 6px;
+	border: 1px solid black;
 
 	font-family: 'Helvetica Neue', sans-serif;
 	font-weight: bold;

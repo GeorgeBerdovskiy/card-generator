@@ -1,58 +1,68 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Card from '../components/Card'
 
 import axios from "axios"
 import secrets from '../warehouse/secrets'
+
+const gradients = [
+	["#6441A5", "#2a0845"], ["#ffb347", "#ffcc33"],
+	["#43cea2", "#185a9d"], ["#FFA17F", "#00223E"],
+	["#360033", "#0b8793"], ["#948E99", "#2E1437"],
+	["#1e130c", "#9a8478"], ["#D38312", "#A83279"],
+	["#73C8A9", "#ffffff"], ["#fdfc47", "#24fe41"],
+	["#83a4d4", "#b6fbff"], ["#fe8c00", "#f83600"],
+	["#00c6ff", "#0072ff"], ["#70e1f5", "#ffd194"],
+	["#556270", "#FF6B6B"], ["#9D50BB", "#6E48AA"],
+	["#B3FFAB", "#12FFF7"], ["#AAFFA9", "#11FFBD"],
+	["#F0C27B", "#4B1248"], ["#FF4E50", "#F9D423"],
+	["#ADD100", "#7B920A"], ["#FBD3E9", "#BB377D"],
+]
 
 const Home = (props) => {
 	const [name, setName] = useState("")
 	const [number, setNumber] = useState("")
 	const [security, setSecurity] = useState("")
 	const [expiration, setExpiration] = useState("")
+	const [gradient, setGradient] = useState("linear-gradient(to right, #fe8c00 , #f83600)")
 
-	const [gradient, setGradient] = useState(`
-		radial-gradient(at 40% 20%, hsla(28,100%,74%,1) 0px, transparent 50%),
-		radial-gradient(at 80% 0%, hsla(189,100%,56%,1) 0px, transparent 50%),
-		radial-gradient(at 0% 50%, hsla(355,100%,93%,1) 0px, transparent 50%),
-		radial-gradient(at 80% 50%, hsla(340,100%,76%,1) 0px, transparent 50%),
-		radial-gradient(at 0% 100%, hsla(22,100%,77%,1) 0px, transparent 50%),
-		radial-gradient(at 80% 100%, hsla(242,100%,70%,1) 0px, transparent 50%),
-		radial-gradient(at 0% 0%, hsla(343,100%,76%,1) 0px, transparent 50%)`)
+	const [loading, setLoading] = useState([false, false])
 
 	function generateDetails() {
 		console.log("Generating details...")
+		setLoading([true, true])
 		
 		// Generate a random name
 		axios.get('https://randomuser.me/api/').then(function (response) {
 			setName(`${response.data.results[0].name.first} ${response.data.results[0].name.last}`)
+			setLoading([false, loading[1]])
 		}).catch(function (error) {
 			console.error(error)
+			setLoading([false, loading[1]])
+			return
 		})
+
+		const options = {
+			method: 'GET',
+			url: 'https://payment-card-numbers-generator.p.rapidapi.com/generate',
+			params: {quantity: '1', scheme: 'visa'},
+			headers: {
+				'X-RapidAPI-Key': secrets.cardKey,
+				'X-RapidAPI-Host': 'payment-card-numbers-generator.p.rapidapi.com'
+			}
+		};
+		
+		axios.request(options).then(function (response) {
+			setNumber(response.data.cards[0])
+			setLoading([loading[0], false])
+		}).catch(function (error) {
+			console.error(error)
+			setLoading([loading[0], false])
+			return
+		});
 
 		// Generate a random gradient background
-		const colorOptions = {
-			method: 'GET',
-			url: 'https://random-palette-generator.p.rapidapi.com/palette/Complementary/1/7',
-			headers: {
-			  'X-RapidAPI-Key': secrets.paletteApi,
-			  'X-RapidAPI-Host': 'random-palette-generator.p.rapidapi.com'
-			}
-		}
-		  
-		axios.request(colorOptions).then(function (response) {
-			let colors = response.data.data[0].palette
-
-			setGradient(`
-				radial-gradient(at 40% 20%, ${colors[0]} 0px, transparent 50%),
-				radial-gradient(at 80% 0%, ${colors[1]} 0px, transparent 50%),
-				radial-gradient(at 0% 50%, ${colors[2]} 0px, transparent 50%),
-				radial-gradient(at 80% 50%, ${colors[3]} 0px, transparent 50%),
-				radial-gradient(at 0% 100%, ${colors[4]} 0px, transparent 50%),
-				radial-gradient(at 80% 100%, ${colors[5]} 0px, transparent 50%),
-				radial-gradient(at 0% 0%, ${colors[6]} 0px, transparent 50%)`)
-		}).catch(function (error) {
-			console.error(error)
-		})
+		let index = Math.floor(Math.random() * gradients.length)
+		setGradient(`linear-gradient(to right, ${gradients[index][0]} , ${gradients[index][1]})`)
 
 		// Generate a random expiration date
 		let expiration = expirationDate(new Date(2022, 1, 1), new Date(2031, 1, 1)).toLocaleDateString('en-US', {
@@ -73,9 +83,9 @@ const Home = (props) => {
 	return (
 		<>
 			<div className='padded-centered'>
-				<Card name={ name } expiration={ expiration } security={ security } gradient={ gradient }></Card>
-
-				<button onClick={ generateDetails }>Generate Details</button>
+				<Card name={ name } number={ number } expiration={ expiration } security={ security } gradient={ gradient } loading={ loading }></Card>
+				
+				<button onClick={ generateDetails }>{ (loading[0] || loading[1]) ? "Generating..." : "Generate Details" }</button>
 			</div>
 		</>
 	)
