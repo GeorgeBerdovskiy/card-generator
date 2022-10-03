@@ -18,4 +18,5 @@ Want to play around with this project? Download or clone, enter the directory, u
 
 ## Image credentials
 <a href="https://www.flaticon.com/free-icons/credit-card">Credit card icon (logo) created by Freepik - Flaticon.</a>
+
 <a href="https://www.flaticon.com/free-icons/credit-card">Credit card icon (favicon) created by creative_designer - Flaticon.</a>
