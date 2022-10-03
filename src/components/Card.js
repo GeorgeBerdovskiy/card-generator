@@ -7,8 +7,6 @@ const Card = (props) => {
 	useEffect(() => {
         setDetails({ ...details, "name": props.name, "number": props.number, "security": props.security, "expiration": props.expiration })
 		setGradient(props.gradient)
-
-		console.log(props.loading)
     }, [props])
 
 	if (details.name && (!props.loading[0] && !props.loading[1])) {

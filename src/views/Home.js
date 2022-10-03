@@ -25,10 +25,16 @@ const Home = (props) => {
 	const [expiration, setExpiration] = useState("")
 	const [gradient, setGradient] = useState("linear-gradient(to right, #fe8c00 , #f83600)")
 
+	const [cardValue, setCardValue] = useState("")
 	const [loading, setLoading] = useState([false, false])
+	const [error, setError] = useState("")
 
 	function generateDetails() {
-		console.log("Generating details...")
+		if (cardValue === "") {
+			setError("Please select card type!")
+			return
+		}
+
 		setLoading([true, true])
 		
 		// Generate a random name
@@ -44,7 +50,7 @@ const Home = (props) => {
 		const options = {
 			method: 'GET',
 			url: 'https://payment-card-numbers-generator.p.rapidapi.com/generate',
-			params: {quantity: '1', scheme: 'visa'},
+			params: {quantity: '1', scheme: cardValue},
 			headers: {
 				'X-RapidAPI-Key': secrets.cardKey,
 				'X-RapidAPI-Host': 'payment-card-numbers-generator.p.rapidapi.com'
@@ -80,12 +86,28 @@ const Home = (props) => {
 		return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 	}
 
+	const handleChange = (event) => {
+		// This is okay because the card type is the only input here
+		setCardValue(event.target.value)
+		setError("")
+	}
+
 	return (
 		<>
 			<div className='padded-centered'>
 				<Card name={ name } number={ number } expiration={ expiration } security={ security } gradient={ gradient } loading={ loading }></Card>
 				
-				<button onClick={ generateDetails }>{ (loading[0] || loading[1]) ? "Generating..." : "Generate Details" }</button>
+				<select name="scheme" id="scheme" className='margin-bottom-half' style={{ border: (error === "") ? "3px solid black" : "3px solid #ff6b6b" }} value={ cardValue } onChange={ handleChange }>
+					<option value="">Press to Choose Card Type...</option>
+					<option value="visa">Visa</option>
+					<option value="mastercard">MasterCard</option>
+					<option value="amex">American Express</option>
+					<option value="discover">Discover</option>
+				</select>
+
+				<button className='margin-bottom-half' onClick={ generateDetails }>{ (loading[0] || loading[1]) ? "Generating..." : "Generate Details" }</button>
+
+				{ (error !== "") && <p className='error-p' style={{ color: "#ff6b6b" }}>{ error }</p> }
 			</div>
 		</>
 	)

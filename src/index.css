@@ -108,9 +108,51 @@ button {
 	cursor: pointer;
 }
 
+select {
+	display: block;
+
+	width: 500px;
+	max-width: 100%;
+	margin: 0 auto;
+
+	padding: 16px 32px 16px 32px;
+
+	background-color: white;
+	border-radius: 500px;
+	border: 3px solid black;
+	outline: none;
+
+	font-family: 'Krona One', sans-serif;
+	text-align: center;
+	color: black;
+
+	cursor: pointer;
+}
+
 /* GENERAL */
+.error-p {
+	width: 500px;
+	max-width: 100%;
+	margin: 0 auto;
+
+	font-family: 'Krona One', sans-serif;
+}
+
 .margin-bottom-standard {
 	margin-bottom: 32px;
+}
+
+.margin-bottom-half {
+	margin-bottom: 16px;
+}
+
+select {
+	-moz-appearance: none;
+	-webkit-appearance: none;
+}
+
+select::-ms-expand {
+	display: none;
 }
 
 * {
